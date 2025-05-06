@@ -1,47 +1,54 @@
+// src/escreens/homescreen.js
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text } from 'react-native';
-// import axios from 'axios';
-// import { auth, db } from '../firebase';
-// import { addDoc, collection } from 'firebase/firestore';
+import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen() {
   const [origem, setOrigem] = useState('');
   const [destino, setDestino] = useState('');
-  const [resultado, setResultado] = useState(null);
+  const [distancia, setDistancia] = useState('');
+  const [tempo, setTempo] = useState('');
+  const navigation = useNavigation();
 
-  const calcularRota = async () => {
-    const apiKey = 'SUA_API_KEY_GOOGLE_MAPS';
-    const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origem}&destinations=${destino}&key=${apiKey}`;
+  const calcularDistancia = () => {
+    // Simulação de cálculo simples
+    const km = Math.floor(Math.random() * 100) + 1;
+    const min = km * 2;
 
-    try {
-      const response = await axios.get(url);
-      const data = response.data.rows[0].elements[0];
-      const distancia = data.distance.text;
-      const duracao = data.duration.text;
-      setResultado({ distancia, duracao });
+    setDistancia(`${km} km`);
+    setTempo(`${min} minutos`);
+  };
 
-      await addDoc(collection(db, 'destinos'), {
-        uid: auth.currentUser.uid,
-        origem,
-        destino,
-        distancia,
-        duracao,
-        timestamp: new Date()
-      });
-    } catch (error) {
-      console.error(error);
-    }
+  const salvarHistorico = async () => {
+    // Aqui você pode salvar no Firestore mais tarde
+    navigation.navigate('Perfil', {
+      origem,
+      destino,
+      distancia,
+      tempo
+    });
   };
 
   return (
-    <View>
-      <TextInput placeholder="Origem" onChangeText={setOrigem} />
-      <TextInput placeholder="Destino" onChangeText={setDestino} />
-      <Button title="Calcular" onPress={calcularRota} />
-      {resultado && (
-        <Text>Distância: {resultado.distancia} | Tempo: {resultado.duracao}</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Calcular Rota</Text>
+      <TextInput placeholder="Origem" style={styles.input} value={origem} onChangeText={setOrigem} />
+      <TextInput placeholder="Destino" style={styles.input} value={destino} onChangeText={setDestino} />
+      <Button title="Calcular" onPress={calcularDistancia} />
+      {distancia !== '' && (
+        <View style={styles.result}>
+          <Text>Distância: {distancia}</Text>
+          <Text>Tempo estimado: {tempo}</Text>
+          <Button title="Salvar e ir para Perfil" onPress={salvarHistorico} />
+        </View>
       )}
-      <Button title="Perfil" onPress={() => navigation.navigate('Perfil')} />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20, justifyContent: 'center' },
+  title: { fontSize: 24, textAlign: 'center', marginBottom: 20 },
+  input: { borderWidth: 1, padding: 10, marginBottom: 10, borderRadius: 5 },
+  result: { marginTop: 20, alignItems: 'center' }
+});

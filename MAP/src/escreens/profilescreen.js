@@ -1,28 +1,41 @@
+// src/escreens/profilescreen.js
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
-// import { auth, db } from '../firebase';
-// import { collection, query, where, getDocs } from 'firebase/firestore';
+import { View, Text, StyleSheet } from 'react-native';
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ route }) {
   const [historico, setHistorico] = useState([]);
 
   useEffect(() => {
-    const carregarHistorico = async () => {
-      const q = query(collection(db, 'destinos'), where('uid', '==', auth.currentUser.uid));
-      const snapshot = await getDocs(q);
-      const dados = snapshot.docs.map(doc => doc.data());
-      setHistorico(dados);
-    };
-    carregarHistorico();
-  }, []);
+    if (route.params) {
+      const novaEntrada = {
+        origem: route.params.origem,
+        destino: route.params.destino,
+        distancia: route.params.distancia,
+        tempo: route.params.tempo,
+      };
+      setHistorico((prev) => [...prev, novaEntrada]);
+    }
+  }, [route.params]);
 
   return (
-    <View>
-      <Text>Usuário: {auth.currentUser.email}</Text>
-      <Text>Histórico de Viagens:</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Perfil do Usuário</Text>
+      <Text style={styles.subtitle}>Histórico de Viagens:</Text>
       {historico.map((item, index) => (
-        <Text key={index}>{item.origem} → {item.destino} | {item.distancia} | {item.duracao}</Text>
+        <View key={index} style={styles.item}>
+          <Text>Origem: {item.origem}</Text>
+          <Text>Destino: {item.destino}</Text>
+          <Text>Distância: {item.distancia}</Text>
+          <Text>Tempo: {item.tempo}</Text>
+        </View>
       ))}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20 },
+  title: { fontSize: 26, marginBottom: 10, textAlign: 'center' },
+  subtitle: { fontSize: 20, marginBottom: 10 },
+  item: { backgroundColor: '#eee', padding: 10, borderRadius: 8, marginBottom: 10 }
+});
