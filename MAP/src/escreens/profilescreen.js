@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
-import { auth, db } from '../firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+// import { auth, db } from '../firebase';
+// import { collection, query, where, getDocs } from 'firebase/firestore';
 
 export default function ProfileScreen() {
   const [historico, setHistorico] = useState([]);

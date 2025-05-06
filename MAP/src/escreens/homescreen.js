@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text } from 'react-native';
-import axios from 'axios';
-import { auth, db } from '../firebase';
-import { addDoc, collection } from 'firebase/firestore';
+// import axios from 'axios';
+// import { auth, db } from '../firebase';
+// import { addDoc, collection } from 'firebase/firestore';
 
 export default function HomeScreen({ navigation }) {
   const [origem, setOrigem] = useState('');
