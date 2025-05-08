@@ -1,44 +1,93 @@
 // src/escreens/loginscreen.js
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
-import { auth } from './firebase';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert,} from 'react-native';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import app from '../../firebaseConfig'; // ajuste o caminho se necessário
 
-export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
 
-  const login = async () => {
-    try {
-      await signInWithEmailAndPassword(auth, email, senha);
-      navigation.replace('Home');
-    } catch (err) {
-      Alert.alert("Erro ao logar", err.message);
+const RealizarLogin = ({ navigation }) => {
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+
+    const tentarLogar = () => {
+        const auth = getAuth(app);
+        signInWithEmailAndPassword(auth, email, senha)
+        .then(() => {
+            navigation.navigate('homescreen');
+            alert('Login realizado com sucesso!');
+        })
+        .catch((error) => {
+                alert('ta indo')
+                console.error('Login failed:', error);
+            });
+
     }
-  };
+    return (
+        <View style={styles.container}>
+            <Text style={styles.titulo}>Login</Text>
 
-  const cadastrar = async () => {
-    try {
-      await createUserWithEmailAndPassword(auth, email, senha);
-      navigation.replace('Home');
-    } catch (err) {
-      Alert.alert("Erro ao cadastrar", err.message);
-    }
-  };
+            <TextInput style={styles.input} placeholder="Email" onChangeText={setEmail} keyboardType="email-address"autoCapitalize='none'
+            />
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput placeholder="Email" style={styles.input} value={email} onChangeText={setEmail} />
-      <TextInput placeholder="Senha" style={styles.input} secureTextEntry value={senha} onChangeText={setSenha} />
-      <Button title="Entrar" onPress={login} />
-      <Button title="Cadastrar" onPress={cadastrar} />
-    </View>
-  );
+            <TextInput style={styles.input} placeholder="Senha" onChangeText={setSenha} secureTextEntry={true} autoCapitalize='none'/>
+
+            <TouchableOpacity onPress={tentarLogar}>
+                <Text style={styles.texto}>Entrar</Text>
+            </TouchableOpacity>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 20 },
-  input: { borderWidth: 1, marginBottom: 10, padding: 10, borderRadius: 5 },
-  title: { fontSize: 24, textAlign: 'center', marginBottom: 20 },
+    container: {
+        flex: 1,
+        backgroundColor: '#f0f4f8',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+    },
+    titulo: {
+        fontSize: 36,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        color: '#333',
+    },
+    logo: {
+        height: 120,
+        width: 120,
+        marginBottom: 30,
+        borderRadius: 60,
+    },
+    input: {
+        width: '100%',
+        height: 50,
+        backgroundColor: '#fff',
+        borderRadius: 25,
+        paddingHorizontal: 20,
+        marginVertical: 10,
+        fontSize: 16,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 5,
+        elevation: 3,
+    },
+    texto: {
+        width: '100%',
+        backgroundColor: '#4CAF50',
+        borderRadius: 25,
+        paddingVertical: 12,
+        marginTop: 20,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOpacity: 0.2,
+        shadowOffset: { width: 0, height: 3 },
+        shadowRadius: 4,
+        elevation: 4,
+        color: 'white',
+        fontSize: 18,
+        fontWeight: '600',
+    },
 });
+
+export default RealizarLogin;
