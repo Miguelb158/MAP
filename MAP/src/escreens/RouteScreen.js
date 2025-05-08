@@ -60,7 +60,7 @@ const RouteScreen = ({ route }) => {
         };
 
         const headers = {
-          Authorization: '5b3ce3597851110001cf62488edca339cf86440ba562fb3ac74b6f76', // <-- Substitua pela sua chave
+          Authorization: 'SUA_API_KEY_OPENROUTESERVICE', // <-- Substitua pela sua chave
           'Content-Type': 'application/json',
         };
 
