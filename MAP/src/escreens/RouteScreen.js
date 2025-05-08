@@ -23,7 +23,7 @@ const RouteScreen = ({ route, navigation }) => {
           },
           headers: {
             'User-Agent': 'MeuAppDeRotas/1.0 (meuemail@exemplo.com)',
-          },
+          }
         });
 
         if (response.data.length === 0) {
