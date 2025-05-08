@@ -1,86 +1,159 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, KeyboardAvoidingView, Platform, ImageBackground } from 'react-native';
 
-export default function ProfileScreen() {
-  const navigation = useNavigation();
-  return (
-    <View style={styles.container}>
-      <View style={styles.iconContainer}>
-        <Icon name="user" style={styles.icon} />
-      </View>
-      <Text style={styles.title}>Perfil do Usuário</Text>
+const RealizarLogin = ({ navigation }) => {
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
 
-     
-      <View style={styles.fixedInfo}>
-        <Text style={styles.fixedText}>Usuário: sesi@Gmail.com</Text>
-        <Text style={styles.fixedText}>Senha: 707070</Text>
-      </View>
+    const usuarioEstatico = 'sesi@gmail.com';
+    const senhaEstatica = '707070';
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
-        <Text style={styles.buttonText}>Voltar</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
+    const tentarLogar = () => {
+        if (email === usuarioEstatico && senha === senhaEstatica) {
+            navigation.navigate('Home');
+        } else {
+            setModalMessage('Email ou senha incorretos!');
+            setModalVisible(true);
+        }
+    };
+
+    return (
+        <ImageBackground 
+            source={require('../../assets/map.png')} 
+            style={styles.backgroundImage}
+            resizeMode="cover"
+        >
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={styles.container}
+            >
+                <View style={styles.innerContainer}>
+                    <Text style={styles.titulo}>Login</Text>
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Email"
+                        onChangeText={setEmail}
+                        value={email}
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                        placeholderTextColor="#999"
+                    />
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Senha"
+                        onChangeText={setSenha}
+                        value={senha}
+                        secureTextEntry={true}
+                        autoCapitalize="none"
+                        placeholderTextColor="#999"
+                    />
+
+                    <TouchableOpacity style={styles.botao} onPress={tentarLogar}>
+                        <Text style={styles.textoBotao}>Entrar</Text>
+                    </TouchableOpacity>
+                </View>
+
+                {/* Modal personalizado */}
+                <Modal
+                    transparent={true}
+                    visible={modalVisible}
+                    animationType="fade"
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <View style={styles.modalBackground}>
+                        <View style={styles.modalContainer}>
+                            <Text style={styles.modalText}>{modalMessage}</Text>
+                        </View>
+                    </View>
+                </Modal>
+            </KeyboardAvoidingView>
+        </ImageBackground>
+    );
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#f4f4f4',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 28,
-    marginBottom: 20,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  iconContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 30,
-  },
-  icon: {
-    fontSize: 100,  // Aumentando o ícone
-    color: '#00796B', // Definindo a cor do ícone
-  },
-  fixedInfo: {
-    backgroundColor: '#ffffff',
-    padding: 20,
-    borderRadius: 10,
-    marginBottom: 25,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  fixedText: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 10,
-  },
-  button: {
-    backgroundColor: '#4CAF50',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 25,
-    alignItems: 'center',
-    marginTop: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-  },
+    backgroundImage: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+    },
+    innerContainer: {
+        width: '100%',
+        maxWidth: 400,
+        alignItems: 'center',
+        backgroundColor: '#ffffffcc',
+        borderRadius: 20,
+        padding: 30,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 3 },
+        shadowRadius: 10,
+        elevation: 8,
+    },
+    titulo: {
+        fontSize: 36,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        color: '#00796B',
+    },
+    input: {
+        width: '100%',
+        height: 50,
+        backgroundColor: '#fff',
+        borderRadius: 25,
+        paddingHorizontal: 20,
+        marginVertical: 10,
+        fontSize: 16,
+        borderColor: '#b2dfdb',
+        borderWidth: 1,
+    },
+    botao: {
+        width: '100%',
+        backgroundColor: '#00796B',
+        borderRadius: 25,
+        paddingVertical: 14,
+        marginTop: 20,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOpacity: 0.2,
+        shadowOffset: { width: 0, height: 3 },
+        shadowRadius: 5,
+        elevation: 5,
+    },
+    textoBotao: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: '600',
+    },
+    // Estilos do modal
+    modalBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContainer: {
+        backgroundColor: '#fff',
+        padding: 20,
+        borderRadius: 10,
+        width: 250,
+        alignItems: 'center',
+    },
+    modalText: {
+        fontSize: 18,
+        color: '#333',
+        fontWeight: '500',
+    },
 });
+
+export default RealizarLogin;
