@@ -23,8 +23,13 @@ export default function HomeScreen({ navigation }) {
     });
   };
 
+  // Função de voltar à tela anterior
+  const voltar = () => {
+    navigation.goBack();
+  };
+
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Calcular Rota</Text>
       <TextInput
         placeholder="Destino"
