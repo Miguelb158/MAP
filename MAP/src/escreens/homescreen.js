@@ -17,11 +17,12 @@ export default function HomeScreen({ navigation }) {
 
   const handleNavigate = () => {
     if (!destination || !location) return;
-    navigation.navigate('Route', {
+    navigation.navigate('RouteScreen', {
       origin: location,
       destination: destination
     });
   };
+
 
   return (
     <View style={styles.container}>

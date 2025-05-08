@@ -60,7 +60,7 @@ const RouteScreen = ({ route }) => {
         };
 
         const headers = {
-          Authorization: 'SUA_API_KEY_OPENROUTESERVICE', // <-- Substitua pela sua chave
+          Authorization: '5b3ce3597851110001cf62488edca339cf86440ba562fb3ac74b6f76', // <-- Substitua pela sua chave
           'Content-Type': 'application/json',
         };
 
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   map: { flex: 1 },
   infoBox: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 50,
     left: 10,
     right: 10,
     backgroundColor: '#fff',
@@ -141,5 +141,4 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
 });
-
 export default RouteScreen;
