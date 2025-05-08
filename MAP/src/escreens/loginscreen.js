@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, KeyboardAvoidingView, Platform, ImageBackground } from 'react-native';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import app from '../../firebaseConfig';
+
 
 const RealizarLogin = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -9,24 +8,6 @@ const RealizarLogin = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
 
-    const tentarLogar = () => {
-        const auth = getAuth(app);
-        signInWithEmailAndPassword(auth, email, senha)
-            .then(() => {
-                setModalMessage('Login realizado com sucesso!');
-                setModalVisible(true);
-                setTimeout(() => {
-                    setModalVisible(false);
-                    navigation.navigate('Home');
-                }, 2000);
-            })
-            .catch((error) => {
-                setModalMessage('Email ou senha incorretos!');
-                setModalVisible(true);
-                console.error('Login failed:', error);
-                setTimeout(() => setModalVisible(false), 2000);
-            });
-    };
 
     return (
         <ImageBackground 
@@ -59,7 +40,7 @@ const RealizarLogin = ({ navigation }) => {
                         placeholderTextColor="#999"
                     />
 
-                    <TouchableOpacity onPress={tentarLogar} style={styles.botao}>
+                    <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Home')}>
                         <Text style={styles.textoBotao}>Entrar</Text>
                     </TouchableOpacity>
                 </View>
