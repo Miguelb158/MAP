@@ -22,7 +22,7 @@ const RouteScreen = ({ route }) => {
             limit: 1,
           },
           headers: {
-            'User-Agent': 'MeuAppDeRotas/1.0 (meuemail@exemplo.com)', // Substitua por algo seu
+            'User-Agent': 'MeuAppDeRotas/1.0 (meuemail@exemplo.com)',
           },
         });
 
@@ -45,10 +45,10 @@ const RouteScreen = ({ route }) => {
 
     getCoordinatesFromName();
   }, []);
-};
-useEffect(() => {
+
+  useEffect(() => {
     if (!destCoords) return;
-  
+
     const fetchRoute = async () => {
       try {
         const body = {
@@ -58,31 +58,25 @@ useEffect(() => {
           ],
           format: 'json',
         };
-  
+
         const headers = {
-          Authorization: '5b3ce3597851110001cf624898bf327f00146c81f8d3fe2d2e32fd3d', // Substitua por sua própria chave
+          Authorization: '5b3ce3597851110001cf62488edca339cf86440ba562fb3ac74b6f76', // <-- Substitua pela sua chave
           'Content-Type': 'application/json',
         };
-  
+
         const response = await axios.post(
           'https://api.openrouteservice.org/v2/directions/driving-car',
           body,
           { headers }
         );
-  
-        const routeData = response.data?.routes?.[0];
-        if (!routeData || !routeData.geometry) {
-          console.error('Dados inválidos da rota:', response.data);
-          Alert.alert('Erro', 'Não foi possível traçar a rota.');
-          return;
-        }
-  
+
+        const routeData = response.data.routes[0];
         const decoded = polyline.decode(routeData.geometry);
         const coords = decoded.map(([lat, lon]) => ({
           latitude: lat,
           longitude: lon,
         }));
-  
+
         setRouteCoords(coords);
         setInfo(routeData.summary);
       } catch (error) {
@@ -92,9 +86,10 @@ useEffect(() => {
         setLoading(false);
       }
     };
-  
+
     fetchRoute();
   }, [destCoords]);
+
   if (loading || !destCoords) {
     return (
       <View style={styles.loadingContainer}>
@@ -103,7 +98,7 @@ useEffect(() => {
       </View>
     );
   }
-  
+
   return (
     <View style={styles.container}>
       <MapView
@@ -129,6 +124,22 @@ useEffect(() => {
       )}
     </View>
   );
-  
-  export default RouteScreen;
-    
+};
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  map: { flex: 1 },
+  infoBox: {
+    position: 'absolute',
+    bottom: 20,
+    left: 10,
+    right: 10,
+    backgroundColor: '#fff',
+    padding: 10,
+    borderRadius: 10,
+    elevation: 4,
+  },
+});
+
+export default RouteScreen;
