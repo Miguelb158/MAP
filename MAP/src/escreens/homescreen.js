@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import * as Location from 'expo-location';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function HomeScreen({ navigation }) {
   const [location, setLocation] = useState(null);
@@ -23,11 +24,24 @@ export default function HomeScreen({ navigation }) {
     });
   };
 
+  const irParaPerfil = () => {
+    navigation.navigate('Perfil');
+  };
+
+  const handleLogout = () => {
+    navigation.replace('Login'); // Troca para a tela de login
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
+      {/* Ícone de perfil no topo direito */}
+      <TouchableOpacity style={styles.profileIcon} onPress={irParaPerfil}>
+        <Ionicons name="person-circle-outline" size={36} color="#00796B" />
+      </TouchableOpacity>
+
       <View style={styles.innerContainer}>
         <Text style={styles.title}>Calcular Rota</Text>
         <TextInput
@@ -41,6 +55,11 @@ export default function HomeScreen({ navigation }) {
         <TouchableOpacity style={styles.botao} onPress={handleNavigate}>
           <Text style={styles.textoBotao}>Calcular Rota</Text>
         </TouchableOpacity>
+
+        {/* Botão de Sair */}
+        <TouchableOpacity style={styles.logoutBotao} onPress={handleLogout}>
+          <Text style={styles.textoBotao}>Sair</Text>
+        </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
@@ -53,6 +72,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
+  },
+  profileIcon: {
+    position: 'absolute',
+    top: 50,
+    right: 30,
+    zIndex: 10,
   },
   innerContainer: {
     width: '100%',
@@ -96,6 +121,19 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 5,
     elevation: 5,
+  },
+  logoutBotao: {
+    width: '60%',
+    backgroundColor: '#d32f2f',
+    borderRadius: 25,
+    paddingVertical: 10,
+    marginTop: 15,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    elevation: 4,
   },
   textoBotao: {
     color: 'white',
