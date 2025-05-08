@@ -1,6 +1,5 @@
-// src/escreens/loginscreen.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView, Platform, ImageBackground } from 'react-native';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import app from '../../firebaseConfig';
 
@@ -12,53 +11,63 @@ const RealizarLogin = ({ navigation }) => {
         const auth = getAuth(app);
         signInWithEmailAndPassword(auth, email, senha)
             .then(() => {
-                navigation.navigate('homescreen');
+                navigation.navigate('Home');
                 alert('Login realizado com sucesso!');
             })
             .catch((error) => {
-                alert(' nao ta indo sua anta');
+                alert('Email ou senha incorretos!');
                 console.error('Login failed:', error);
             });
     };
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.container}
+        <ImageBackground 
+            source={require('../../assets/loc.jpg')} 
+            style={styles.backgroundImage}
+            resizeMode="cover"
         >
-            <View style={styles.innerContainer}>
-                <Text style={styles.titulo}>Login</Text>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={styles.container}
+            >
+                <View style={styles.innerContainer}>
+                    <Text style={styles.titulo}>Login</Text>
 
-                <TextInput
-                    style={styles.input}
-                    placeholder="Email"
-                    onChangeText={setEmail}
-                    keyboardType="email-address"
-                    autoCapitalize='none'
-                    placeholderTextColor="#999"
-                />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Email"
+                        onChangeText={setEmail}
+                        keyboardType="email-address"
+                        autoCapitalize='none'
+                        placeholderTextColor="#999"
+                    />
 
-                <TextInput
-                    style={styles.input}
-                    placeholder="Senha"
-                    onChangeText={setSenha}
-                    secureTextEntry={true}
-                    autoCapitalize='none'
-                    placeholderTextColor="#999"
-                />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Senha"
+                        onChangeText={setSenha}
+                        secureTextEntry={true}
+                        autoCapitalize='none'
+                        placeholderTextColor="#999"
+                    />
 
-                <TouchableOpacity onPress={tentarLogar} style={styles.botao}>
-                    <Text style={styles.textoBotao}>Entrar</Text>
-                </TouchableOpacity>
-            </View>
-        </KeyboardAvoidingView>
+                    <TouchableOpacity onPress={tentarLogar} style={styles.botao}>
+                        <Text style={styles.textoBotao}>Entrar</Text>
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
+        </ImageBackground>
     );
 };
 
 const styles = StyleSheet.create({
+    backgroundImage: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+    },
     container: {
         flex: 1,
-        backgroundColor: '#e0f7fa',
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 20,
