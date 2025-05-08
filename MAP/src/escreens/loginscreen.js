@@ -12,7 +12,7 @@ const RealizarLogin = ({ navigation }) => {
         const auth = getAuth(app);
         signInWithEmailAndPassword(auth, email, senha)
             .then(() => {
-                navigation.navigate('homescreen');
+                navigation.navigate('Home');
                 alert('Login realizado com sucesso!');
             })
             .catch((error) => {
