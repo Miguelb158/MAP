@@ -22,7 +22,7 @@ const RealizarLogin = ({ navigation }) => {
 
     return (
         <ImageBackground 
-            source={require('../../assets/loc.jpg')} 
+            source={require('../../assets/map.png')} 
             style={styles.backgroundImage}
             resizeMode="cover"
         >
