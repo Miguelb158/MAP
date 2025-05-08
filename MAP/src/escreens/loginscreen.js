@@ -1,17 +1,27 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, KeyboardAvoidingView, Platform, ImageBackground } from 'react-native';
 
-
 const RealizarLogin = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
 
+    const usuarioEstatico = 'sesi@gmail.com';
+    const senhaEstatica = '707070';
+
+    const tentarLogar = () => {
+        if (email === usuarioEstatico && senha === senhaEstatica) {
+            navigation.navigate('Home');
+        } else {
+            setModalMessage('Email ou senha incorretos!');
+            setModalVisible(true);
+        }
+    };
 
     return (
-        <ImageBackground 
-            source={require('../../assets/map.png')} 
+        <ImageBackground
+            source={require('../../assets/map.png')}
             style={styles.backgroundImage}
             resizeMode="cover"
         >
@@ -26,6 +36,7 @@ const RealizarLogin = ({ navigation }) => {
                         style={styles.input}
                         placeholder="Email"
                         onChangeText={setEmail}
+                        value={email}
                         keyboardType="email-address"
                         autoCapitalize="none"
                         placeholderTextColor="#999"
@@ -35,12 +46,13 @@ const RealizarLogin = ({ navigation }) => {
                         style={styles.input}
                         placeholder="Senha"
                         onChangeText={setSenha}
+                        value={senha}
                         secureTextEntry={true}
                         autoCapitalize="none"
                         placeholderTextColor="#999"
                     />
 
-                    <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Home')}>
+                    <TouchableOpacity style={styles.botao} onPress={tentarLogar}>
                         <Text style={styles.textoBotao}>Entrar</Text>
                     </TouchableOpacity>
                 </View>
@@ -145,3 +157,5 @@ const styles = StyleSheet.create({
 });
 
 export default RealizarLogin;
+
+
