@@ -21,6 +21,13 @@ export default function ProfileScreen({ route }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Perfil do Usuário</Text>
+      
+      {/* Exibindo usuário e senha fixos */}
+      <View style={styles.fixedInfo}>
+        <Text style={styles.fixedText}>Usuário: sesi@Gmail.com</Text>
+        <Text style={styles.fixedText}>Senha: 707070</Text>
+      </View>
+
       <Text style={styles.subtitle}>Histórico de Viagens:</Text>
 
       {historico.length > 0 ? (
@@ -87,4 +94,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
+  fixedInfo: {
+    backgroundColor: '#e0e0e0',
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 20,
+    marginTop: 10,
+  },
+  fixedText: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 5,
+  },
 });
+
