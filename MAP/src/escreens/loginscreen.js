@@ -1,22 +1,30 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView, Platform, ImageBackground } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, KeyboardAvoidingView, Platform, ImageBackground } from 'react-native';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import app from '../../firebaseConfig';
 
 const RealizarLogin = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
 
     const tentarLogar = () => {
         const auth = getAuth(app);
         signInWithEmailAndPassword(auth, email, senha)
             .then(() => {
-                navigation.navigate('Home');
-                alert('Login realizado com sucesso!');
+                setModalMessage('Login realizado com sucesso!');
+                setModalVisible(true);
+                setTimeout(() => {
+                    setModalVisible(false);
+                    navigation.navigate('Home');
+                }, 2000);
             })
             .catch((error) => {
-                alert('Email ou senha incorretos!');
+                setModalMessage('Email ou senha incorretos!');
+                setModalVisible(true);
                 console.error('Login failed:', error);
+                setTimeout(() => setModalVisible(false), 2000);
             });
     };
 
@@ -38,7 +46,7 @@ const RealizarLogin = ({ navigation }) => {
                         placeholder="Email"
                         onChangeText={setEmail}
                         keyboardType="email-address"
-                        autoCapitalize='none'
+                        autoCapitalize="none"
                         placeholderTextColor="#999"
                     />
 
@@ -47,7 +55,7 @@ const RealizarLogin = ({ navigation }) => {
                         placeholder="Senha"
                         onChangeText={setSenha}
                         secureTextEntry={true}
-                        autoCapitalize='none'
+                        autoCapitalize="none"
                         placeholderTextColor="#999"
                     />
 
@@ -55,6 +63,20 @@ const RealizarLogin = ({ navigation }) => {
                         <Text style={styles.textoBotao}>Entrar</Text>
                     </TouchableOpacity>
                 </View>
+
+                {/* Modal personalizado */}
+                <Modal
+                    transparent={true}
+                    visible={modalVisible}
+                    animationType="fade"
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <View style={styles.modalBackground}>
+                        <View style={styles.modalContainer}>
+                            <Text style={styles.modalText}>{modalMessage}</Text>
+                        </View>
+                    </View>
+                </Modal>
             </KeyboardAvoidingView>
         </ImageBackground>
     );
@@ -119,6 +141,25 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 18,
         fontWeight: '600',
+    },
+    // Estilos do modal
+    modalBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContainer: {
+        backgroundColor: '#fff',
+        padding: 20,
+        borderRadius: 10,
+        width: 250,
+        alignItems: 'center',
+    },
+    modalText: {
+        fontSize: 18,
+        color: '#333',
+        fontWeight: '500',
     },
 });
 
