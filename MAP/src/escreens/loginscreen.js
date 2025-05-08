@@ -45,7 +45,7 @@ const RealizarLogin = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
 
-                {/* Modal personalizado */}
+                
                 <Modal
                     transparent={true}
                     visible={modalVisible}
