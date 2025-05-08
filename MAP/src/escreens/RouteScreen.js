@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Alert, StyleSheet, ActivityIndicator } from 'react-native';
-import MapView, { Marker, Polyline } from 'react-native-maps';
+import { View, Text, Alert, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import MapView, { Marker, Polyline,  } from 'react-native-maps';
 import axios from 'axios';
 import polyline from '@mapbox/polyline';
 
-const RouteScreen = ({ route }) => {
+const RouteScreen = ({ route, navigation }) => {
   const { origin, destination } = route.params;
   const [routeCoords, setRouteCoords] = useState([]);
   const [info, setInfo] = useState(null);
@@ -101,6 +101,9 @@ const RouteScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.backButtonText}>Voltar</Text>
+      </TouchableOpacity>
       <MapView
         style={styles.map}
         initialRegion={{
@@ -140,5 +143,21 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 4,
   },
+  backButton: {
+    position: 'absolute',
+    top: 40,
+    left: 300,
+    backgroundColor: '#fff',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    zIndex: 10,
+    elevation: 5,
+  },
+  backButtonText: {
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  
 });
 export default RouteScreen;
